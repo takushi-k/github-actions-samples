@@ -41,6 +41,22 @@ jobs:
       # 「Send greeting」のstepで実行するコマンド
       run: echo "Hello ${{ inputs.name }}"
 
+    - name: Prepare farewell message
+      if: ${{ inputs.is-set-farewell-message }}
+      # id: ステップのIDを設定
+      id: set-farewell-message
+      # 後の step で farewell_message を ${{ steps.set-farewell-message.outputs.farewell-message }} で参照できるようにする
+      run: |
+        echo "farewell-message=Did you receive the greeting I sent earlier?" >> "$GITHUB_OUTPUT"
+
+    - name: Debug
+      if: ${{ inputs.is-set-farewell-message }}
+      # ${{ steps.set-farewell-message.outputs.farewell_message }} の値を表示
+      # (stepのIDを指定して、"$GITHUB_OUTPUT"に設定された変数を取得)
+      # ※それぞれの値の実態がわかるようにechoやcatを実行しています
+      run: |
+        echo "${{ steps.set-farewell-message.outputs.farewell-message }}"
+        
   # 「farewell」という2つ目の job を用意
   farewell:
     # このジョブが実行される前に「greet」jobの完了が必要
