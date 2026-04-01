@@ -1,0 +1,34 @@
+# workflow の名前です。実行時に表示される
+name: Manual workflow
+
+# on: アクションが実行されるタイミングを指定
+on:
+  # 「workflow_dispatch」を指定すると、GitHub上で手動実行できる
+  workflow_dispatch:
+    # 手動実行時に入力する値を設定
+    inputs:
+      # 入力項目「name」を設定
+      name:
+        # 'name' の入力項目のプレースホルダー
+        description: 'Person to greet'
+        # 明示的に値が提供されない場合のデフォルト値
+        default: 'World'
+        # ワークフローを実行するために入力が必要
+        required: true
+        # 入力のデータタイプ
+        type: string
+
+# job: この workflow で実行される処理を記載
+jobs:
+  # 「greet」という1つ目の job を用意
+  greet:
+    # job 実行環境の設定
+    runs-on: ubuntu-latest
+
+    # steps: 実行されるタスクを設定。上から順番に実行される
+    steps:
+    # step1の処理名は 「Send greeting」
+    - name: Send greeting
+      # run: 実行するコマンドを指定できる。
+      # 「Send greeting」のstepで実行するコマンド
+      run: echo "Hello ${{ inputs.name }}"
