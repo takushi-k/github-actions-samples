@@ -1,5 +1,5 @@
 # workflow の名前です。実行時に表示される
-name: Manual workflow
+name: Manual workflow 2
 
 # on: アクションが実行されるタイミングを指定
 on:
