@@ -41,8 +41,14 @@ jobs:
       # 「Send greeting」のstepで実行するコマンド
       run: echo "Hello ${{ inputs.name }}"
 
-    # step2の処理名は 「Send farewell」
+  # 「farewell」という2つ目の job を用意
+  farewell:
+    # このジョブが実行される前に「greet」jobの完了が必要
+    # needs: greet
+
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Send farewell
-      # if を使うと特定の条件の時だけ実行できる
-      if: ${{ inputs.is-set-farewell-message }}    
+      if: ${{ inputs.is-set-farewell-message }}
       run: echo "Goodbye ${{ inputs.name }}"
