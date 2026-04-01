@@ -44,7 +44,7 @@ jobs:
   # 「farewell」という2つ目の job を用意
   farewell:
     # このジョブが実行される前に「greet」jobの完了が必要
-    # needs: greet
+    needs: greet
 
     runs-on: ubuntu-latest
 
