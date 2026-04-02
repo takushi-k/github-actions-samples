@@ -1,6 +1,9 @@
 name: Validate Semantic Versioning
 
 on:
+  push:
+    tags:
+      - '*'
   # 手動実行(セマンティックバージョニングの文字列が入力値)
   workflow_dispatch:
     inputs:
