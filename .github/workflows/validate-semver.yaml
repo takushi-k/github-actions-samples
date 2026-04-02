@@ -16,6 +16,9 @@ jobs:
   validate-tag:
     runs-on: ubuntu-latest
 
+    outputs:
+      tag: ${{ steps.set-vars.outputs.tag }}
+
     steps:
       # タグの値の参照方法がイベントごとに異なるため、後続処理で参照方法を統一できるように変数を用意する
       - name: Set Variables Based on Event
@@ -46,3 +49,9 @@ jobs:
         uses: ./.github/actions/validate-semver
         with:
           version: ${{ github.event.inputs.version }}
+
+  call-workflow:
+    needs: validate-tag
+    uses: ./.github/workflows/validation-finished.yaml
+    with:
+      tag: ${{ needs.validate-tag.outputs.tag }}
