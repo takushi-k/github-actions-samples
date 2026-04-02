@@ -32,15 +32,17 @@ jobs:
           fi
           echo "tag=${tag}" >> $GITHUB_OUTPUT
           echo "tag=${tag}"
-    
-      # タグの文字列をチェックする
-      - name: Validate Semantic Version
-        id: validate-version
-        run: |
-          VERSION=${{ steps.set-vars.outputs.tag }}
-          SEMVER_REGEX="^v([0-9]+)\.([0-9]+)\.([0-9]+)$"
-          if [[ ! "$VERSION" =~ $SEMVER_REGEX ]]; then
-            echo "Invalid version: ${VERSION}"
-            exit 1
-          fi
-          echo "Version is valid: ${VERSION}"
+
+      # コードを取得（with で何も指定していない場合は、workflow が動いているリポジトリのコードがgit cloneされる)
+      - name: Checkout code
+        # 公開されている actions/checkout を使用
+        # https://github.com/actions/checkout/releases
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+
+      # カスタムアクションを使って version の文字列をチェック
+      - name: Validate Semantic Version (for workflow_dispatch)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        # Composite action を使用
+        uses: ./.github/actions/validate-semver
+        with:
+          version: ${{ github.event.inputs.version }}
